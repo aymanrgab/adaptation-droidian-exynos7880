@@ -1,0 +1,16 @@
+[Unit]
+Description=Workaround for some Exynos devices
+Before=phosh.service
+After=lxc@android.service
+Depends=lxc@android.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/sleep 5
+ExecStartPre=/usr/bin/waitforservice init.svc.vendor.hwcomposer-*
+ExecStart=/usr/bin/mount -o bind /dev/null /vendor/lib64/hw/hwcomposer.exynos5.so 
+ExecStop=-/usr/bin/umount /vendor/lib64/hw/hwcomposer.exynos5.so 
+
+[Install]
+WantedBy=graphical.target
